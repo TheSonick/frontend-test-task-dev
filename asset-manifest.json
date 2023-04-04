@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/frontend-test-task-deploy.git/static/css/main.c2fa5a55.css",
-    "main.js": "/frontend-test-task-deploy.git/static/js/main.3e8d82ce.js",
-    "index.html": "/frontend-test-task-deploy.git/index.html",
-    "main.c2fa5a55.css.map": "/frontend-test-task-deploy.git/static/css/main.c2fa5a55.css.map",
-    "main.3e8d82ce.js.map": "/frontend-test-task-deploy.git/static/js/main.3e8d82ce.js.map"
+    "main.css": "/frontend-test-task-dev.git/static/css/main.c2fa5a55.css",
+    "main.js": "/frontend-test-task-dev.git/static/js/main.3e8d82ce.js",
+    "index.html": "/frontend-test-task-dev.git/index.html",
+    "main.c2fa5a55.css.map": "/frontend-test-task-dev.git/static/css/main.c2fa5a55.css.map",
+    "main.3e8d82ce.js.map": "/frontend-test-task-dev.git/static/js/main.3e8d82ce.js.map"
   },
   "entrypoints": [
     "static/css/main.c2fa5a55.css",
