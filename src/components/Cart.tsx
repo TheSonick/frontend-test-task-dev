@@ -13,7 +13,7 @@ const Cart = () => {
    const [finalCurrency, setFinalCurrency] = useState<string>('')
 
    //Work with currencies
-   const currenciesRatesURL = 'http://www.floatrates.com/daily/uah.json'
+   const currenciesRatesURL = 'https://www.floatrates.com/daily/uah.json'
    const getCurrenciesRates = async (): Promise<ICurrency[]> => {
       const res = await fetch(currenciesRatesURL)
       const currency = await res.json()
