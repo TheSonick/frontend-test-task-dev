@@ -2,7 +2,7 @@
   "name": "salestio-frontend-test-task",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://TheSonick.github.io/frontend-test-task-dev.git",
+  "homepage": "https://theSonick.github.io/frontend-test-task-dev.git",
   "dependencies": {
     "@shopify/polaris": "^10.39.1",
     "@testing-library/jest-dom": "^5.16.5",
@@ -12,6 +12,7 @@
     "@types/node": "^16.18.22",
     "@types/react": "^18.0.31",
     "@types/react-dom": "^18.0.11",
+    "gh-pages": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
@@ -49,8 +50,5 @@
     "tabWidth": 3,
     "semi": false,
     "singleQuote": true
-  },
-  "devDependencies": {
-    "gh-pages": "^5.0.0"
   }
 }
