@@ -7,6 +7,7 @@ interface ActionsProps {
    currencies: ICurrency[] | undefined
    total: number
    finalCurrency: string
+   isLoading: boolean
    isSending: boolean
    handleFinalCurrencyChange: (value: string) => void
    handleAddItem: (
@@ -24,6 +25,7 @@ const Actions: FC<ActionsProps> = ({
    currencies,
    total,
    finalCurrency,
+   isLoading,
    isSending,
    handleSaveButton,
    handleFinalCurrencyChange,
@@ -39,7 +41,11 @@ const Actions: FC<ActionsProps> = ({
    )
    return (
       <ButtonGroup>
-         <Button onClick={() => handleAddItem(cartItems, currencies)} outline>
+         <Button
+            disabled={isLoading ? true : false}
+            onClick={() => handleAddItem(cartItems, currencies)}
+            outline
+         >
             Add product +
          </Button>
          <Select
@@ -51,6 +57,7 @@ const Actions: FC<ActionsProps> = ({
          />
          <Button
             loading={isSending ? true : false}
+            disabled={isLoading ? true : false}
             onClick={() => handleSaveButton(cartItems, finalCurrency, total)}
             primary
          >
