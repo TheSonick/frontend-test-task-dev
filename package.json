@@ -2,7 +2,6 @@
   "name": "salestio-frontend-test-task",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://TheSonick.github.io/frontend-test-task-dev.git",
   "dependencies": {
     "@shopify/polaris": "^10.39.1",
     "@testing-library/jest-dom": "^5.16.5",
