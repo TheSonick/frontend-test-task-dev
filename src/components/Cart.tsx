@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { useQuery } from 'react-query'
-import { ICartItem, ICurrency, ISavedData } from '../types/types'
-import { LegacyStack, Divider, Loading, InlineError } from '@shopify/polaris'
+import { ICartItem, ISavedData } from '../types/types'
+import { ICurrency } from '../types/currency'
+import { LegacyStack, Divider } from '@shopify/polaris'
+import { useTypedSelector } from '../hooks/useTypedSelector'
 import defaultCartItems from '../cartItems'
 import CartItems from './CartItems'
 import Actions from './Actions'
@@ -10,25 +11,11 @@ const Cart = () => {
    const [cartItems, setCartItems] = useState<ICartItem[]>(defaultCartItems)
    const [isSending, setIsSending] = useState<boolean>(false)
    const [total, setTotal] = useState<number>(0)
-   const [finalCurrency, setFinalCurrency] = useState<string>('')
 
    //Work with currencies
-   const currenciesRatesURL = 'https://floatrates.com/daily/uah.json'
-   const getCurrenciesRates = async (): Promise<ICurrency[]> => {
-      const res = await fetch(currenciesRatesURL)
-      const currency = await res.json()
-      setFinalCurrency(Object.values<ICurrency>(currency)[0].code)
-      return Object.values<ICurrency>(currency)
-   }
-
-   const { data, isLoading, error } = useQuery<ICurrency[]>(
-      'currencies',
-      getCurrenciesRates
+   const { currencies, finalCurrency } = useTypedSelector(
+      (state) => state.currencies
    )
-
-   const handleFinalCurrencyChange = useCallback((value: string) => {
-      setFinalCurrency(value)
-   }, [])
    //----------------------------------------------------------
 
    //Calculating total cart value
@@ -63,28 +50,28 @@ const Cart = () => {
    //----------------------------------------------------------
 
    //Adding item to cart
-   const handleAddItem = useCallback(
-      (cartItems: ICartItem[], currencies: ICurrency[] | undefined) => {
-         const id = cartItems.length + 1
-         const title = `Product Text Field ` + (cartItems.length + 1)
-         const price = Number((Math.random() * 100).toFixed(2))
-         if (currencies) {
-            const currency =
-               currencies[Math.floor(Math.random() * currencies.length)].code
-            const qty = Math.ceil(Math.random() * 10)
-            const item: ICartItem = {
-               id,
-               title,
-               price,
-               currency,
-               qty,
-            }
-            const newCartItems = [...cartItems, item]
-            setCartItems(newCartItems)
+   const handleAddItem = (
+      cartItems: ICartItem[],
+      currencies: ICurrency[] | undefined
+   ) => {
+      const id = cartItems.length + 1
+      const title = `Product Text Field ` + (cartItems.length + 1)
+      const price = Number((Math.random() * 100).toFixed(2))
+      if (currencies) {
+         const currency =
+            currencies[Math.floor(Math.random() * currencies.length)].code
+         const qty = Math.ceil(Math.random() * 10)
+         const item: ICartItem = {
+            id,
+            title,
+            price,
+            currency,
+            qty,
          }
-      },
-      []
-   )
+         const newCartItems = [...cartItems, item]
+         setCartItems(newCartItems)
+      }
+   }
    //----------------------------------------------------------
 
    //Save button handler
@@ -99,30 +86,33 @@ const Cart = () => {
       setIsSending(false)
       return await response.json()
    }
-   const handleSaveButton = useCallback(
-      (cartItems: ICartItem[], finalCurrency: string, total: number) => {
-         const savedData = {} as ISavedData
-         savedData.order = cartItems
-         savedData.total = total
-         savedData.finalCurrency = finalCurrency
-         setIsSending(true)
-         sendData(currenciesRatesURL, JSON.stringify(savedData))
-            .then(() => {
-               alert('Data saved successfully')
-            })
-            .catch((e) => {
-               throw new Error(`Data wasn't send`)
-            })
-      },
-      []
-   )
+   const handleSaveButton = (
+      cartItems: ICartItem[],
+      finalCurrency: string,
+      total: number
+   ) => {
+      const savedData = {} as ISavedData
+      savedData.order = cartItems
+      savedData.total = total
+      savedData.finalCurrency = finalCurrency
+      setIsSending(true)
+      sendData(
+         'https://floatrates.com/daily/uah.json',
+         JSON.stringify(savedData)
+      )
+         .then(() => {
+            alert('Data saved successfully')
+         })
+         .catch((e) => {
+            throw new Error(`Data wasn't send`)
+         })
+   }
    //----------------------------------------------------------
+
    useEffect(() => {
-      calculateTotal(cartItems, data, finalCurrency)
-   }, [calculateTotal, cartItems, data, finalCurrency])
-   if (isLoading) return <Loading />
-   if (error)
-      return <InlineError message="Something went wrong..." fieldID="error" />
+      calculateTotal(cartItems, currencies, finalCurrency)
+   }, [calculateTotal, cartItems, currencies, finalCurrency])
+
    return (
       <LegacyStack spacing="loose" vertical>
          <CartItems
@@ -134,13 +124,9 @@ const Cart = () => {
          <LegacyStack distribution="trailing">
             <Actions
                cartItems={cartItems}
-               currencies={data}
                total={total}
-               finalCurrency={finalCurrency}
-               isLoading={isLoading}
                isSending={isSending}
                handleAddItem={handleAddItem}
-               handleFinalCurrencyChange={handleFinalCurrencyChange}
                handleSaveButton={handleSaveButton}
             />
          </LegacyStack>
