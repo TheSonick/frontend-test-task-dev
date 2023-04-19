@@ -16,7 +16,6 @@ Use the package manager NPM to install dependencies.
 
 ```bash
 npm install
-npm run start
 ```
 
 To run app Development Server.
